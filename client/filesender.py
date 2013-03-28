@@ -11,7 +11,7 @@ def sendfile(filepath, addr = 'localhost', port = 25002):
             s.sendall(file_stringed)
             if not file_stringed:
                 break
-        s.close()
+    s.close()
 
 if __name__ == '__main__':
         sendfile(sys.argv[1])
