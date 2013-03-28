@@ -1,5 +1,5 @@
-#!/usr/bin/env python3.2
-import socket, time
+#!/usr/bin/env python2
+import socket, datetime 
 
 def reciever(port = 25002):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -7,8 +7,9 @@ def reciever(port = 25002):
     s.listen(1)
     conn, addr = s.accept()
     print(addr)
-    data = ''
-    with open('testfile.jpg', 'wb+') as image:
+    now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    filepath = '%s, %s.png' % (addr[0], now)
+    with open(filepath, 'wb+') as image:
         while True:
             data = conn.recv(1024)
             if not data: break
@@ -17,4 +18,5 @@ def reciever(port = 25002):
     print("koniec")
 
 if __name__ == '__main__':
-    reciever()
+    while 1:
+        reciever()

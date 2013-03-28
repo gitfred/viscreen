@@ -1,5 +1,17 @@
-#!/usr/bin/env python3.2
-import socket, sys
+#!/usr/bin/env python2
+import socket, sys, gtk.gdk
+from subprocess import call
+
+def getscreen(name = "sc", ext = "png"):
+    window = gtk.gdk.get_default_root_window()
+    size = window.get_size()
+    screen = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB,False,8,size[0],size[1])
+    screen = screen.get_from_drawable(window,window.get_colormap(),0,0,0,0,size[0],size[1])
+    if (screen != None):
+        filename = '.'.join([name,ext])
+        screen.save(filename, ext)
+        return filename
+    return None
 
 def sendfile(filepath, addr = 'localhost', port = 25002):
     """Function for sending a file"""
@@ -12,6 +24,8 @@ def sendfile(filepath, addr = 'localhost', port = 25002):
             if not file_stringed:
                 break
     s.close()
+    call(['rm', filepath])
 
 if __name__ == '__main__':
-        sendfile(sys.argv[1])
+        filepath = getscreen()
+        sendfile(filepath)
