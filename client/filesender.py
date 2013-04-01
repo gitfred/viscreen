@@ -12,8 +12,7 @@ def getscreen(name = "sc", ext = "png"):
     if (screen != None):
         filename = '.'.join([name,ext])
         screen.save(filename, ext)
-        return filename
-    return None
+    return filename
 
 def sendfile(filepath, addr = 'localhost', port = 25002):
     """Function for sending a file"""
