@@ -13,22 +13,25 @@ class ConnectionHandler(Thread):
 
     def run(self):
         while True:
+            filesize = self.sock.recv(1024)
+            self.sock.send(filesize)
+            filesize = int(filesize)
             now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-            print(now)
             filepath = '%s/%s, %s.png' % (self.addr[0], self.addr[0], now)
             if not os.path.exists(self.addr[0]):
                 os.makedirs(self.addr[0])
             with open(filepath, 'wb+') as image:
-                while True:
+                recvsize = 0
+                while recvsize<filesize:
                     data = self.sock.recv(1024)
                     image.write(data)
-                    if len(data < 1024): break
-            print(filepath)
+                    recvsize += len(data)
+            print(filepath, "breaken")
         self.sock.close()
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((socket.gethostname(), PORT))
+    s.bind(('', PORT))
     s.listen(40)
     while 1:
         conn, addr = s.accept()
