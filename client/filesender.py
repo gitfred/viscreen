@@ -2,7 +2,7 @@
 import socket, sys, gtk.gdk, time
 from subprocess import call
 
-FREQUENCY = 30 #in seconds
+FREQUENCY = 20 #in seconds
 
 def getscreen(name = "sc", ext = "png"):
     window = gtk.gdk.get_default_root_window()
@@ -27,7 +27,7 @@ def sendfile(filepath, sock):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('fred', 25007))
+    s.connect((socket.gethostname(), 25007))
     starttime = time.time()
     sendfile(getscreen(),s)
     while 1:

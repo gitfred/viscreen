@@ -20,24 +20,8 @@ class ConnectionHandler(Thread):
             with open(filepath, 'wb+') as image:
                 while True:
                     data = self.sock.recv(1024)
-                    if not data: break
-                    image.write(data)
-            print(filepath)
+                    if len(data) < 1024: break
         self.sock.close()
-
-def reciever(sock):
-    conn, addr = s.accept()
-    now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    filepath = '%s/%s, %s.png' % (addr[0], addr[0], now)
-    if not os.path.exists(addr[0]):
-        os.makedirs(addr[0])
-    with open(filepath, 'wb+') as image:
-        while True:
-            data = conn.recv(1024)
-            if not data: break
-            image.write(data)
-    conn.close()
-    print(filepath)
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
