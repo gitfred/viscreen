@@ -15,23 +15,26 @@ def getscreen(name = "sc", ext = "png"):
         return filename
     return None
 
-def sendfile(filepath, addr = 'localhost', port = 25002):
+def sendfile(filepath, sock):
     """Function for sending a file"""
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((addr, port))
     with open(filepath, 'rb') as img:
         while True:
             file_stringed = img.read(1024)
-            s.sendall(file_stringed)
+            sock.sendall(file_stringed)
             if not file_stringed:
                 break
-    s.close()
     call(['rm', filepath])
 
 if __name__ == '__main__':
-        starttime = time.time()
-        sendfile(getscreen())
-        while 1:
-            if (time.time() - starttime) > FREQUENCY:
-                sendfile(getscreen())
-                starttime = time.time()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(('fred', 25006))
+    starttime = time.time()
+    sendfile(getscreen(),s)
+    s.close()
+    while 1:
+        if (time.time() - starttime) > FREQUENCY:
+            s.connect(('fred', 25006))
+            sendfile(getscreen(),s)
+            s.close()
+            print("ok")
+            starttime = time.time()
