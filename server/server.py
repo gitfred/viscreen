@@ -17,9 +17,10 @@ class ConnectionHandler(Thread):
             self.sock.send(filesize)
             filesize = int(filesize)
             now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-            filepath = '%s/%s, %s.png' % (self.addr[0], self.addr[0], now)
-            if not os.path.exists(self.addr[0]):
-                os.makedirs(self.addr[0])
+            folder = '%s(%s)' % (socket.gethostbyaddr(self.addr[0])[0], self.addr[0])
+            filepath = '%s/%s, %s.png' % (folder, self.addr[0], now)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
             with open(filepath, 'wb+') as image:
                 recvsize = 0
                 while recvsize<filesize:
