@@ -33,3 +33,7 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Serverowy stuff
+server/[1-9][0-9]{1,2}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
+*.png
