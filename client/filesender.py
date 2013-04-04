@@ -27,14 +27,12 @@ def sendfile(filepath, sock):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('fred', 25006))
+    s.connect(('fred', 25007))
     starttime = time.time()
     sendfile(getscreen(),s)
-    s.close()
     while 1:
         if (time.time() - starttime) > FREQUENCY:
-            s.connect(('fred', 25006))
             sendfile(getscreen(),s)
-            s.close()
             print("ok")
             starttime = time.time()
+    s.close()
