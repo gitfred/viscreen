@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
-import socket, sys, gtk.gdk, time
+import socket, sys, gtk.gdk, time, os
 from subprocess import call
 
-FREQUENCY = 20 #in seconds
+FREQUENCY = 7 #in seconds
 
 def getscreen(name = "sc", ext = "png"):
     window = gtk.gdk.get_default_root_window()
@@ -17,17 +17,19 @@ def getscreen(name = "sc", ext = "png"):
 
 def sendfile(filepath, sock):
     """Function for sending a file"""
+    filesize = os.path.getsize(filepath)
+    sock.send(str(filesize))
+    sock.recv(1024)
     with open(filepath, 'rb') as img:
         while True:
             file_stringed = img.read(1024)
-            sock.sendall(file_stringed)
-            if not file_stringed:
-                break
+            sock.send(file_stringed)
+            if not file_stringed: break
     call(['rm', filepath])
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((socket.gethostname(), 25007))
+    s.connect(('192.168.0.21', 25007))
     starttime = time.time()
     sendfile(getscreen(),s)
     while 1:
