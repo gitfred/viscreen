@@ -14,13 +14,16 @@ class ConnectionHandler(Thread):
     def run(self):
         while True:
             now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+            print(now)
             filepath = '%s/%s, %s.png' % (self.addr[0], self.addr[0], now)
             if not os.path.exists(self.addr[0]):
                 os.makedirs(self.addr[0])
             with open(filepath, 'wb+') as image:
                 while True:
                     data = self.sock.recv(1024)
-                    if len(data) < 1024: break
+                    image.write(data)
+                    if len(data < 1024): break
+            print(filepath)
         self.sock.close()
 
 if __name__ == '__main__':
