@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-import socket, datetime, os
+import socket, datetime, os, select, sys
 from threading import Thread
 
 PORT = 25007
@@ -34,6 +34,11 @@ if __name__ == '__main__':
     s.bind(('', PORT))
     s.listen(40)
     while 1:
-        conn, addr = s.accept()
-        ch = ConnectionHandler(conn, addr)
-        ch.run()
+        i,o,e = select.select([s, sys.stdin],[],[])
+        for elem in i:
+            if elem == s:
+                conn, addr = elem.accept()
+                ch = ConnectionHandler(conn, addr)
+                ch.start()
+            elif s == sys.stdin:
+                junk = sys.stdin.readline()
