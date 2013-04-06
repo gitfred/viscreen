@@ -2,7 +2,7 @@
 import socket, datetime, os, select, sys
 from threading import Thread
 
-PORT = 25007
+PORT = 9001
 
 class ConnectionHandler(Thread):
 
@@ -35,11 +35,6 @@ if __name__ == '__main__':
     s.bind(('', PORT))
     s.listen(40)
     while 1:
-        i,o,e = select.select([s, sys.stdin],[],[])
-        for elem in i:
-            if elem == s:
-                conn, addr = elem.accept()
-                ch = ConnectionHandler(conn, addr)
-                ch.start()
-            elif s == sys.stdin:
-                junk = sys.stdin.readline()
+        conn, addr = s.accept()
+        ch = ConnectionHandler(conn, addr)
+        ch.start()
