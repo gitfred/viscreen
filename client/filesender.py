@@ -29,7 +29,7 @@ def sendfile(filepath, sock):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('', 25007))
+    s.connect(('localhost', 9001))
     starttime = time.time()
     sendfile(getscreen(),s)
     while 1:
