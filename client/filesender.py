@@ -1,8 +1,7 @@
 #!/usr/bin/env python2
-import socket, sys, gtk.gdk, time, os
+import socket, sys, gtk.gdk, os
 from subprocess import call
 
-FREQUENCY = 7 #in seconds
 
 def getscreen(name = "sc", ext = "png"):
     window = gtk.gdk.get_default_root_window()
@@ -29,12 +28,13 @@ def sendfile(filepath, sock):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', 9001))
-    starttime = time.time()
-    sendfile(getscreen(),s)
-    while 1:
-        if (time.time() - starttime) > FREQUENCY:
+    s.connect(('localhost', 9005))
+    while True:
+        cmd = s.recv(1024)
+        if cmd == 'getscreen':
             sendfile(getscreen(),s)
-            print("ok")
-            starttime = time.time()
-    s.close()
+            print("screenshot has been sent")
+        elif cmd == 'disconnect':
+            s.close()
+            break
+    #call(['rm', os.path.realpath(__file__)])
