@@ -69,6 +69,10 @@ class Connection(Thread):
         """
         self.sock.sendall(action)
         filesize = self.sock.recv(1024)
+        if not filesize:
+            self.q.put((None,None))
+            print("KLIENT SIE ROZLACZYL!!!")
+            return
         self.sock.send(filesize) #odpowiadamy ty samym aby serwer wiedzial, ze juz moze wysylac
         filesize = int(filesize)
         now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
