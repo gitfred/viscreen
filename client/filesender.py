@@ -2,6 +2,8 @@
 import socket, sys, gtk.gdk, os
 from subprocess import call
 
+SERVER = 'localhost'
+IP = 9005
 
 def getscreen(name = "sc", ext = "png"):
     window = gtk.gdk.get_default_root_window()
@@ -28,7 +30,7 @@ def sendfile(filepath, sock):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', 9005))
+    s.connect((SERVER, IP))
     while True:
         cmd = s.recv(1024)
         if cmd == 'getscreen':
