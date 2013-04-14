@@ -43,3 +43,12 @@ class MainWindowWrapper(QMainWindow):
         for name in [elem.getinfo() for elem in self.serv.conns]:
             QListWidgetItem(name, self.ui.clientList)
 
+    def get_screen_from_selected(self):
+        pass
+
+    def get_screen_from_all(self):
+        pass
+
+    def disconnect_selected(self):
+        pass
+
