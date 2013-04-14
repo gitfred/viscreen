@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>284</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ViScreen</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="clientList">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>141</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lista połączonych klientów</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="getScreenFromSelected">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>60</y>
+      <width>201</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pobierz screena z zaznaczonych(ego)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="getAllScreen">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>100</y>
+      <width>201</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pobierz screena ze wszystkich</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="disconnectSelected">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>140</y>
+      <width>201</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rozłącz zaznaczonych</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
