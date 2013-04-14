@@ -14,7 +14,7 @@ class SomeoneConnected(QtCore.QThread):
     def run(self):
         last = 0
         while True:
-            time.sleep(2)
+            time.sleep(0.5)
             if len(self.serv.conns) != last:
                 last = len(self.serv.conns)
                 self.emit(SIGNAL("connected"))
