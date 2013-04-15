@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from GUI.mainWrapper import MainWindowWrapper, QtGui
 import sys
 

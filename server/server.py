@@ -1,7 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 import socket, datetime, os, select, sys
 from threading import Thread
-from Queue import Queue
+from queue import Queue
 
 PORT = 9005
 
@@ -67,7 +67,7 @@ class Connection(Thread):
         Przyjmuje jakiekolwiek pliki za pomoca aciton,
         zapisuje z wybranym rozszerzeniem
         """
-        self.sock.sendall(action)
+        self.sock.sendall(action.encode('utf-8'))
         filesize = self.sock.recv(1024)
         if not filesize:
             self.q.put((None,None))
@@ -90,7 +90,7 @@ class Connection(Thread):
 
     def close_conn(self):
         self.q.put((None,None)) #wrzucamy do kolejki sygnal konca
-        self.sock.sendall('disconnect')
+        self.sock.sendall('disconnect'.encode('utf-8'))
         
 
     def getinfo(self):
