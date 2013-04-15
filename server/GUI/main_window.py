@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Sun Apr 14 22:13:59 2013
+# Created: Mon Apr 15 11:02:53 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,6 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(540, 284)
+        MainWindow.setMaximumSize(QtCore.QSize(540, 284))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.clientList = QtGui.QListWidget(self.centralwidget)
@@ -48,5 +49,5 @@ class Ui_MainWindow(object):
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Lista połączonych klientów", None, QtGui.QApplication.UnicodeUTF8))
         self.getScreenFromSelected.setText(QtGui.QApplication.translate("MainWindow", "Pobierz screena z zaznaczonych(ego)", None, QtGui.QApplication.UnicodeUTF8))
         self.getAllScreen.setText(QtGui.QApplication.translate("MainWindow", "Pobierz screena ze wszystkich", None, QtGui.QApplication.UnicodeUTF8))
-        self.disconnectSelected.setText(QtGui.QApplication.translate("MainWindow", "Rozłącz zaznaczonych", None, QtGui.QApplication.UnicodeUTF8))
+        self.disconnectSelected.setText(QtGui.QApplication.translate("MainWindow", "Rozłącz zaznaczonych(ego)", None, QtGui.QApplication.UnicodeUTF8))
 

@@ -10,6 +10,12 @@
     <height>284</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>540</width>
+    <height>284</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>ViScreen</string>
   </property>
@@ -73,7 +79,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Rozłącz zaznaczonych</string>
+     <string>Rozłącz zaznaczonych(ego)</string>
     </property>
    </widget>
   </widget>
