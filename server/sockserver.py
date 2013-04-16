@@ -3,8 +3,11 @@ import socket, socketserver, threading, datetime, os, sys
 from queue import Queue
 
 HOST = 'localhost'
-PORT = 9003
-CONNS = []
+PORT = 9005
+
+class ConnsThreadingTCPServer(socketserver.ThreadingTCPServer):
+    conns = []
+
 class RequestHandler(socketserver.BaseRequestHandler):
 
     def setup(self):
@@ -15,7 +18,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         print("%s (%s) connected" % (self.host, self.addr))
 
     def handle(self):
-        CONNS.append(self)
+        ConnsThreadingTCPServer.conns.append(self)
         while True:
             action, extension = self.q.get()
             if not action:
@@ -34,7 +37,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
             self.q.put((None,None))
             print("client disconnected")
             return
-        self.request.send(filesize) #odpowiadamy ty samym aby serwer wiedzial, ze juz moze wysylac
+        self.request.send(filesize) #odpowiadamy ty samym aby klient wiedzial, ze juz moze wysylac
         filesize = int(filesize)
         now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         folder = '%s (%s)' % (self.host, self.addr[0])
@@ -61,9 +64,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
     def getscreen(self):
         self.q.put(('getscreen', 'png'))
 
-
 if __name__ == '__main__':
-    serv = socketserver.ThreadingTCPServer((HOST,PORT), RequestHandler)
+    serv = ConnsThreadingTCPServer((HOST,PORT), RequestHandler)
     serv_thread = threading.Thread(target = serv.serve_forever)
     serv_thread.daemon = True
     serv_thread.start()
@@ -72,37 +74,33 @@ if __name__ == '__main__':
     while True:
         cmd = input("Type command: ")
         if cmd == 's':
-            for elem in CONNS:
+            for elem in ConnsThreadingTCPServer.conns:
                print(elem.getinfo())
         elif cmd =='d':
-            if CONNS:
-                conns = ["%d: %s" % (CONNS.index(elem), elem.getinfo()) for elem in CONNS]
+            if ConnsThreadingTCPServer.conns:
+                conns = ["%d: %s" % (ConnsThreadingTCPServer.conns.index(elem), elem.getinfo()) for elem in ConnsThreadingTCPServer.conns]
                 for elem in conns:
                     print(elem)
                 nr = int(input("Type client id: "))
-                CONNS[nr].close_conn()
-                del CONNS[nr]
+                ConnsThreadingTCPServer.conns[nr].close_conn()
+                del ConnsThreadingTCPServer.conns[nr]
             else:
                 print("No clients connected")
         elif cmd == 'g':
-            if CONNS:
-                conns = ["%d: %s" % (CONNS.index(elem), elem.getinfo()) for elem in CONNS]
+            if ConnsThreadingTCPServer.conns:
+                conns = ["%d: %s" % (ConnsThreadingTCPServer.conns.index(elem), elem.getinfo()) for elem in ConnsThreadingTCPServer.conns]
                 for elem in conns:
                     print(elem)
                 nr = int(input("Type client id: "))
-                CONNS[nr].getscreen()
+                ConnsThreadingTCPServer.conns[nr].getscreen()
             else:
                 print("No clients connected")
         elif cmd == 'q':
-            if CONNS:
-                for conn in CONNS:
+            if ConnsThreadingTCPServer.conns:
+                for conn in ConnsThreadingTCPServer.conns:
                     conn.close_conn()
 
             serv.shutdown()
             sys.exit()
-
-
-
     serv.shutdown()
-
 
