@@ -1,6 +1,6 @@
 from .main_window import Ui_MainWindow
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QAbstractItemView
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QAbstractItemView, QMessageBox
 from PyQt4.QtCore import SIGNAL
 from server import *
 import time
@@ -53,12 +53,17 @@ class MainWindowWrapper(QMainWindow):
         return selected
 
     def get_screen_from_selected(self):
+        clients = ""
         for client in self.get_selected_items():
             self.serv.getscreen(client)
+            clients +=self.serv.conns[client].getinfo() + " "
+        if clients:
+            QMessageBox.information(self, "Pobrano", "Sprawdź " + clients, QMessageBox.Ok)
 
     def get_screen_from_all(self):
         for index in range(self.ui.clientList.count()):
             self.serv.getscreen(int(self.ui.clientList.item(index).text().split(" ")[2]))
+        QMessageBox.information(self, "Pobrano", "Każdy klient wysłał screena", QMessageBox.Ok)
 
     def disconnect_selected(self):
         for client in self.get_selected_items():
