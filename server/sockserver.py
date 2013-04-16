@@ -3,8 +3,8 @@ import socket, socketserver, threading, datetime, os
 from queue import Queue
 
 HOST = 'localhost'
-PORT = 9007
-
+PORT = 9001
+CONNS = []
 class RequestHandler(socketserver.BaseRequestHandler):
 
     def setup(self):
@@ -15,6 +15,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         print("%s (%s) connected" % (self.host, self.addr))
 
     def handle(self):
+        CONNS.append(self)
         while True:
             action, extension = self.q.get()
             if not action:
@@ -48,20 +49,18 @@ class RequestHandler(socketserver.BaseRequestHandler):
                 recvsize += len(data)
         print(filepath)
 
-class ThreadedServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
-    
-    def __init__(self, server_address, RequestHandlerClass, bind_and_activate=True):
-        socketserver.TCPServer.__init__(self, server_address, RequestHandlerClass,
-                bind_and_activate)
-        self.conns = []
-        
-    def process_request(self, request, client_address):
-        socketserver.ThreadingMixIn.__init__(self, request, client_address)
-        self.conns+=socketserver.ThreadingMixIn.t
+    def close_conn(self):
+        self.q.put((None,None))
+        self.request.sendall('disconnect'.encode('utf-8'))
 
-    
+        
+    def getinfo(self):
+        return "Host: %s IP: %s" % \
+                (self.host, self.addr)
+
+
 if __name__ == '__main__':
-    serv = ThreadedServer((HOST,PORT), RequestHandler)
+    serv = socketserver.ThreadingTCPServer((HOST,PORT), RequestHandler)
     serv_thread = threading.Thread(target = serv.serve_forever)
     serv_thread.daemon = True
     serv_thread.start()
@@ -70,8 +69,16 @@ if __name__ == '__main__':
     while True:
         cmd = input("Type command: ")
         if cmd == 's':
-            for elem in serv.conns:
-                print(elem)
+            for elem in CONNS:
+               print(elem.getinfo())
+        elif cmd =='d':
+            if CONNS:
+                conns = ["%d: %s" % (CONNS.index(elem), elem.getinfo()) for elem in CONNS]
+                for elem in conns:
+                    print(elem)
+                nr = input("Type client id: ")
+                CONNS[int(nr)].close_conn()
+                del CONNS[nr]
 
     serv.shutdown()
 
