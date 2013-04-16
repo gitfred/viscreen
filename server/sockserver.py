@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import socket, socketserver, threading, datetime, os
+import socket, socketserver, threading, datetime, os, sys
 from queue import Queue
 
 HOST = 'localhost'
-PORT = 9001
+PORT = 9003
 CONNS = []
 class RequestHandler(socketserver.BaseRequestHandler):
 
@@ -58,6 +58,9 @@ class RequestHandler(socketserver.BaseRequestHandler):
         return "Host: %s IP: %s" % \
                 (self.host, self.addr)
 
+    def getscreen(self):
+        self.q.put(('getscreen', 'png'))
+
 
 if __name__ == '__main__':
     serv = socketserver.ThreadingTCPServer((HOST,PORT), RequestHandler)
@@ -76,9 +79,29 @@ if __name__ == '__main__':
                 conns = ["%d: %s" % (CONNS.index(elem), elem.getinfo()) for elem in CONNS]
                 for elem in conns:
                     print(elem)
-                nr = input("Type client id: ")
-                CONNS[int(nr)].close_conn()
+                nr = int(input("Type client id: "))
+                CONNS[nr].close_conn()
                 del CONNS[nr]
+            else:
+                print("No clients connected")
+        elif cmd == 'g':
+            if CONNS:
+                conns = ["%d: %s" % (CONNS.index(elem), elem.getinfo()) for elem in CONNS]
+                for elem in conns:
+                    print(elem)
+                nr = int(input("Type client id: "))
+                CONNS[nr].getscreen()
+            else:
+                print("No clients connected")
+        elif cmd == 'q':
+            if CONNS:
+                for conn in CONNS:
+                    conn.close_conn()
+
+            serv.shutdown()
+            sys.exit()
+
+
 
     serv.shutdown()
 
